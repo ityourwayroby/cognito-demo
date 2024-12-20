@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>User Dashboard</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+</head>
+<body>
+<section class="hero is-primary">
+	<div class="hero-body">
+		<div class="container has-text-centered">
+			<h1 class="title">
+				Welcome to the User Dashboard
+			</h1>
+			<h2 class="subtitle">
+				OAuth2 Cognito Integration Demo
+			</h2>
+		</div>
+	</div>
+</section>
+
+<section class="section">
+	<div class="container">
+		<!-- Authenticated User Section -->
+		<div sec:authorize="isAuthenticated()">
+			<div class="box">
+				<h3 class="title is-4">Hello, <span th:text="${#authentication.principal.attributes['name']}"></span>!</h3>
+				<p class="subtitle">Here are your user details:</p>
+
+				<!-- User Attributes Table -->
+				<table class="table is-striped is-fullwidth">
+					<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Value</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>Name</td>
+						<td th:text="${#authentication.principal.attributes['name']}"></td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td th:text="${#authentication.principal.attributes['email']}"></td>
+					</tr>
+					<tr>
+						<td>Class</td>
+						<td th:text="${#authentication.principal.attributes['custom:class']}"></td>
+					</tr>
+					<tr>
+						<td>Occupation</td>
+						<td th:text="${#authentication.principal.attributes['custom:occupation']}"></td>
+					</tr>
+					<tr>
+						<td>School ID</td>
+						<td th:text="${#authentication.principal.attributes['custom:schoolid']}"></td>
+					</tr>
+					<tr>
+						<td>School Name</td>
+						<td th:text="${#authentication.principal.attributes['custom:schoolname']}"></td>
+					</tr>
+					<tr>
+						<td>User ID (Sub)</td>
+						<td th:text="${#authentication.principal.attributes['sub']}"></td>
+					</tr>
+					</tbody>
+				</table>
+
+				<!-- Action Buttons -->
+				<div class="buttons">
+					<!-- Upload to S3 -->
+					<a class="button is-link"
+					   th:href="@{/upload-to-s3}">Upload File to S3</a>
+
+					<!-- Query DynamoDB -->
+					<a class="button is-info"
+					   th:href="@{/query-dynamodb}">Query DynamoDB</a>
+
+					<!-- Query RDS Database -->
+					<a class="button is-success"
+					   th:href="@{/query-rds}">Query RDS Database</a>
+				</div>
+
+				<a class="button is-danger"
+				   th:href="@{https://sglscholarapp.auth.us-east-1.amazoncognito.com/logout?client_id=27k92jhkela082a65ui9jlihol&logout_uri=http://localhost:8089/logout}">Logout</a>
+			</div>
+		</div>
+
+		<!-- Anonymous User Section -->
+		<div sec:authorize="isAnonymous()">
+			<div class="box has-text-centered">
+				<p class="subtitle">Please log in to access your account.</p>
+				<a class="button is-primary"
+				   th:href="@{/oauth2/authorization/cognito-client-1}">Log in with Amazon Cognito</a>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>
