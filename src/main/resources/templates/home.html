@@ -1,103 +1,243 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>User Dashboard</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SGLScholar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        body {
+            background: #f4f8fb;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #4A90E2, #5CDB95);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .button {
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .button.is-primary {
+            background: linear-gradient(135deg, #4A90E2, #5CDB95);
+            color: white;
+            border: none;
+        }
+
+        .button.is-primary:hover {
+            background: linear-gradient(135deg, #357ABD, #4CAF70);
+        }
+
+        .input, .select select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .field {
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-<section class="hero is-primary">
-	<div class="hero-body">
-		<div class="container has-text-centered">
-			<h1 class="title">
-				Welcome to the User Dashboard
-			</h1>
-			<h2 class="subtitle">
-				OAuth2 Cognito Integration Demo
-			</h2>
-		</div>
-	</div>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div>
+        <h1 class="hero-title">Welcome to SGLScholar</h1>
+        <p class="hero-subtitle">Your trusted school management solution for administrators, teachers, and students.</p>
+    </div>
 </section>
 
-<section class="section">
-	<div class="container">
-		<!-- Authenticated User Section -->
-		<div sec:authorize="isAuthenticated()">
-			<div class="box">
-				<h3 class="title is-4">Hello, <span th:text="${#authentication.principal.attributes['name']}"></span>!</h3>
-				<p class="subtitle">Here are your user details:</p>
+<!-- Content Section -->
+<div class="container">
 
-				<!-- User Attributes Table -->
-				<table class="table is-striped is-fullwidth">
-					<thead>
-					<tr>
-						<th>Attribute</th>
-						<th>Value</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td>Name</td>
-						<td th:text="${#authentication.principal.attributes['name']}"></td>
-					</tr>
-					<tr>
-						<td>Email</td>
-						<td th:text="${#authentication.principal.attributes['email']}"></td>
-					</tr>
-					<tr>
-						<td>Class</td>
-						<td th:text="${#authentication.principal.attributes['custom:class']}"></td>
-					</tr>
-					<tr>
-						<td>Occupation</td>
-						<td th:text="${#authentication.principal.attributes['custom:occupation']}"></td>
-					</tr>
-					<tr>
-						<td>School ID</td>
-						<td th:text="${#authentication.principal.attributes['custom:schoolid']}"></td>
-					</tr>
-					<tr>
-						<td>School Name</td>
-						<td th:text="${#authentication.principal.attributes['custom:schoolname']}"></td>
-					</tr>
-					<tr>
-						<td>User ID (Sub)</td>
-						<td th:text="${#authentication.principal.attributes['sub']}"></td>
-					</tr>
-					</tbody>
-				</table>
+    <!-- Login Section -->
+    <div class="card">
+        <h2>Log In</h2>
+        <p>Access your personalized dashboard.</p>
+        <a href="/oauth2/authorization/cognito-client-1" class="button is-primary">Login with SGLScholar</a>
+    </div>
 
-				<!-- Action Buttons -->
-				<div class="buttons">
-					<!-- Upload to S3 -->
-					<a class="button is-link"
-					   th:href="@{/upload-to-s3}">Upload File to S3</a>
+    <!-- Registration Section -->
+    <div class="card">
+        <h2>Register Your School</h2>
+        <form id="registerForm" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
-					<!-- Query DynamoDB -->
-					<a class="button is-info"
-					   th:href="@{/query-dynamodb}">Query DynamoDB</a>
+            <!-- School Name -->
+            <div class="field">
+                <label class="label">School Name</label>
+                <input class="input" type="text" name="schoolName" placeholder="Enter school name" required>
+            </div>
 
-					<!-- Query RDS Database -->
-					<a class="button is-success"
-					   th:href="@{/query-rds}">Query RDS Database</a>
-				</div>
+            <!-- Country -->
+            <div class="field">
+                <label class="label">Country</label>
+                <div class="select is-fullwidth">
+                    <select name="country" required>
+                        <option value="" disabled selected>Select a country</option>
+                        <option value="ghana">Ghana</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="ivory_coast">Ivory Coast</option>
+                        <option value="senegal">Senegal</option>
+                        <option value="togo">Togo</option>
+                    </select>
+                </div>
+            </div>
 
-				<a class="button is-danger"
-				   th:href="@{https://sglscholarapp.auth.us-east-1.amazoncognito.com/logout?client_id=27k92jhkela082a65ui9jlihol&logout_uri=http://localhost:8089/logout}">Logout</a>
-			</div>
-		</div>
+            <!-- Street Address -->
+            <div class="field">
+                <label class="label">Address</label>
+                <input class="input" type="text" name="streetAddress" placeholder="Street Address" required>
+            </div>
 
-		<!-- Anonymous User Section -->
-		<div sec:authorize="isAnonymous()">
-			<div class="box has-text-centered">
-				<p class="subtitle">Please log in to access your account.</p>
-				<a class="button is-primary"
-				   th:href="@{/oauth2/authorization/cognito-client-1}">Log in with Amazon Cognito</a>
-			</div>
-		</div>
-	</div>
-</section>
+            <!-- Postal Code -->
+            <div class="field">
+                <label class="label">Postal Code</label>
+                <input class="input" type="text" name="postalCode" placeholder="Enter postal code" required>
+            </div>
+
+            <!-- School Email -->
+            <div class="field">
+                <label class="label">School Email</label>
+                <input class="input" type="email" name="schoolEmail" placeholder="Enter school email" required>
+            </div>
+
+            <!-- School Contact -->
+            <div class="field">
+                <label class="label">School Contact</label>
+                <input class="input" type="tel" name="schoolContact" placeholder="Enter contact number" required>
+            </div>
+
+            <!-- Registration Number -->
+            <div class="field">
+                <label class="label">Registration Number</label>
+                <input class="input" type="text" name="registrationNumber" placeholder="Enter registration number" required>
+            </div>
+
+            <!-- Upload School Logo -->
+            <div class="field">
+                <label class="label">School Logo</label>
+                <input class="input" type="file" name="schoolLogo" accept="image/*">
+            </div>
+
+            <button type="submit" class="button is-primary">Register School</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const formData = new FormData();
+
+        // Create schoolDTO object
+        const schoolDTO = {
+            schoolName: document.querySelector('input[name="schoolName"]').value,
+            country: document.querySelector('select[name="country"]').value,
+            streetAddress: document.querySelector('input[name="streetAddress"]').value,
+            postalCode: document.querySelector('input[name="postalCode"]').value,
+            schoolEmail: document.querySelector('input[name="schoolEmail"]').value,
+            schoolContact: document.querySelector('input[name="schoolContact"]').value,
+            registrationNumber: document.querySelector('input[name="registrationNumber"]').value,
+        };
+
+        // Append the schoolDTO JSON as a string
+        formData.append("schoolDTO", new Blob([JSON.stringify(schoolDTO)], { type: "application/json" }));
+
+        // Append the file if provided
+        const schoolLogo = document.querySelector('input[name="schoolLogo"]').files[0];
+        if (schoolLogo) {
+            formData.append("schoolLogo", schoolLogo);
+        }
+
+        // Dynamically fetch the CSRF token and header
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+        try {
+            const response = await fetch('/api/schools/register', {
+                method: 'POST',
+                headers: {
+                    [csrfHeader]: csrfToken, // Dynamically set CSRF header
+                },
+                body: formData,
+            });
+
+            if (response.ok) {
+                const responseBody = await response.text();
+                alert(responseBody); // Display the success message
+            } else {
+                const errorBody = await response.text();
+                alert('Registration failed. Error: ' + errorBody);
+            }
+        } catch (error) {
+            alert('An error occurred during registration.');
+            console.error('Error:', error);
+        }
+    });
+</script>
+
 </body>
 </html>

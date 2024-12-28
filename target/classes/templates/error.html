@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Something Went Wrong</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .hero {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .hero .title {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+        }
+
+        .error-details {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            margin-top: 2rem;
+        }
+
+        .button.is-primary {
+            background-color: #3273dc;
+            color: white;
+        }
+
+        .button.is-danger {
+            background-color: #ff6b6b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<section class="hero is-danger">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title">Oops! Something Went Wrong</h1>
+            <h2 class="subtitle">We couldn't process your request. Please try again later or contact support.</h2>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="error-details">
+            <h3 class="title is-4 has-text-centered">Error Details</h3>
+            <div class="table-container">
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Status Code</td>
+                        <td th:text="${status}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Error Message</td>
+                        <td th:text="${error}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Exception</td>
+                        <td th:text="${exception}">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Path</td>
+                        <td th:text="${path}">N/A</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="has-text-centered" style="margin-top: 2rem;">
+            <a href="/" class="button is-primary is-medium">Go to Home Page</a>
+            <a href="/contact" class="button is-danger is-medium">Contact Support</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

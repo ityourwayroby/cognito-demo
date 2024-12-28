@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <!-- CSRF Meta Tags -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4A90E2, #56CCF2);
+            color: white;
+            padding: 1rem;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: #FF6F61;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .logout:hover {
+            background: #E64E4E;
+        }
+
+        .dashboard-layout {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            padding: 1rem;
+            border-right: 1px solid #ddd;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+
+        .sidebar img {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4A90E2;
+            text-transform: uppercase;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #4A90E2;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #f4f8fb;
+        }
+
+        .sidebar ul li a span {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .is-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        #upload-section {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #upload-button {
+            margin: 5px auto;
+        }
+
+        #upload-submit {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h1>Student Dashboard</h1>
+    <a href="#" class="logout">Logout</a>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <img src="https://via.placeholder.com/100" id="profile-picture" alt="Profile Picture">
+        <div id="upload-section">
+            <input type="file" id="upload-button">
+            <button class="button is-primary" id="upload-submit">Upload</button>
+        </div>
+        <h2 id="user-name" th:text="${#authentication.principal.attributes['name']}">Default Name</h2>
+        <ul>
+            <li><a href="#"><span>📚</span>My Courses</a></li>
+            <li><a href="#"><span>📄</span>Assignments</a></li>
+            <li><a href="#"><span>🎥</span>Video Lessons</a></li>
+            <li><a href="#"><span>📝</span>Classwork</a></li>
+            <li><a href="#"><span>📊</span>Performance</a></li>
+            <li><a href="#"><span>📅</span>Schedule</a></li>
+            <li><a href="#"><span>⚙️</span>Settings</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="dashboard-container">
+            <div class="is-grid">
+                <!-- My Courses Section -->
+                <div class="card">
+                    <h2>My Courses</h2>
+                    <p>Access all your enrolled courses.</p>
+                    <button class="button is-primary">View Courses</button>
+                </div>
+
+                <!-- Assignments Section -->
+                <div class="card">
+                    <h2>Assignments</h2>
+                    <p>View and submit assignments given by your teachers.</p>
+                    <button class="button is-link">View Assignments</button>
+                </div>
+
+                <!-- Video Lessons Section -->
+                <div class="card">
+                    <h2>Video Lessons</h2>
+                    <p>Watch lessons recorded by your teachers.</p>
+                    <button class="button is-success">Watch Videos</button>
+                </div>
+
+                <!-- Classwork Section -->
+                <div class="card">
+                    <h2>Classwork</h2>
+                    <p>Access and complete classwork activities.</p>
+                    <button class="button is-warning">View Classwork</button>
+                </div>
+
+                <!-- Performance Section -->
+                <div class="card">
+                    <h2>Performance</h2>
+                    <p>Track your grades and progress in your courses.</p>
+                    <button class="button is-info">View Performance</button>
+                </div>
+
+                <!-- Schedule Section -->
+                <div class="card">
+                    <h2>Schedule</h2>
+                    <p>Check your class schedule and upcoming events.</p>
+                    <button class="button is-link">View Schedule</button>
+                </div>
+
+                <!-- Settings Section -->
+                <div class="card">
+                    <h2>Settings</h2>
+                    <p>Manage your account settings and preferences.</p>
+                    <button class="button is-danger">Account Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('upload-submit').addEventListener('click', function () {
+        const fileInput = document.getElementById('upload-button');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedFileTypes.includes(file.type)) {
+            alert('Please upload a valid image file (JPEG, PNG, GIF).');
+            return;
+        }
+
+        const maxSizeInMB = 2; // 2 MB
+        if (file.size > maxSizeInMB * 1024 * 1024) {
+            alert(`File size exceeds ${maxSizeInMB} MB.`);
+            return;
+        }
+
+        const uploadButton = document.getElementById('upload-submit');
+        uploadButton.disabled = true;
+        uploadButton.textContent = 'Uploading...';
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+
+        if (!csrfToken || !csrfHeader) {
+            alert('CSRF token or header is missing. Please check your meta tags.');
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Upload';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const idToken = localStorage.getItem('id_token');
+        if (!idToken) {
+            alert('Authorization token is missing. Please log in again.');
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Upload';
+            return;
+        }
+
+        fetch('/api/profile/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                [csrfHeader]: csrfToken,
+                'Authorization': `Bearer ${idToken}`
+            },
+        })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`Failed to upload profile picture: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                document.getElementById('profile-picture').src = data.url;
+                alert('Profile picture uploaded successfully!');
+            })
+            .catch(error => {
+                console.error('Error uploading profile picture:', error);
+                alert('An error occurred while uploading the profile picture.');
+            })
+            .finally(() => {
+                uploadButton.disabled = false;
+                uploadButton.textContent = 'Upload';
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <!-- CSRF Meta Tags -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4A90E2, #56CCF2);
+            color: white;
+            padding: 1rem;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: #FF6F61;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .logout:hover {
+            background: #E64E4E;
+        }
+
+        .dashboard-layout {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            padding: 1rem;
+            border-right: 1px solid #ddd;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+
+        .sidebar img {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+        }
+
+        #upload-section {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #upload-button {
+            margin: 5px auto;
+        }
+
+        #upload-submit {
+            margin-top: 10px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4A90E2;
+            text-transform: uppercase;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #4A90E2;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #f4f8fb;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-container h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h1>Administrator Dashboard</h1>
+    <a href="#" class="logout">Logout</a>
+</div>
+
+<div class="dashboard-layout">
+    <div class="sidebar">
+        <img src="https://via.placeholder.com/100" id="profile-picture" alt="Profile Picture">
+        <div id="upload-section">
+            <input type="file" id="upload-button">
+            <button class="button is-primary" id="upload-submit">Upload</button>
+        </div>
+        <h2 id="user-name" th:text="${#authentication.principal.attributes['name']}">Default Name</h2>
+        <ul>
+            <li><a href="#"><span>🏠</span>Dashboard</a></li>
+            <li><a href="#"><span>👨‍🎓</span>Students</a></li>
+            <li><a href="#"><span>👩‍🏫</span>Teachers</a></li>
+            <li><a href="#"><span>📊</span>Reports</a></li>
+            <li><a href="#"><span>📝</span>Tasks</a></li>
+            <li><a href="#"><span>⚙️</span>Settings</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="dashboard-container">
+            <div class="form-container">
+                <!-- Forms for onboarding -->
+                <div class="card">
+                    <h2 class="title is-4">Onboard Students</h2>
+                    <form action="/onboard-student" method="POST">
+                        <div class="columns is-multiline">
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Student Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="studentName" placeholder="Enter student name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Parent/Guardian Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="parentName" placeholder="Enter parent/guardian name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Class/Grade</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="classGrade" placeholder="Enter class/grade">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Contacts</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="contacts" placeholder="Enter contacts">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control">
+                                        <input class="input" type="email" name="email" placeholder="Enter email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Address Line 1</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="addressLine1" placeholder="Enter address line 1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Address Line 2</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="addressLine2" placeholder="Enter address line 2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">City</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="city" placeholder="Enter city">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">State</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="state" placeholder="Enter state">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Zip Code</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="zipCode" placeholder="Enter zip code">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Date of Birth</label>
+                                    <div class="control">
+                                        <input class="input" type="date" name="dob">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Gender</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select name="gender">
+                                                <option>Male</option>
+                                                <option>Female</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Nationality</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="nationality" placeholder="Enter nationality">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Emergency Contact</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="emergencyContact" placeholder="Enter emergency contact">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="has-text-centered mt-4">
+                            <button class="button is-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h2 class="title is-4">Onboard Teachers</h2>
+                    <form action="/onboard-teacher" method="POST">
+                        <div class="columns is-multiline">
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Teacher Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="teacherName" placeholder="Enter teacher name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Contacts</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="contacts" placeholder="Enter contacts">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control">
+                                        <input class="input" type="email" name="email" placeholder="Enter email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Address Line 1</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="addressLine1" placeholder="Enter address line 1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Address Line 2</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="addressLine2" placeholder="Enter address line 2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">City</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="city" placeholder="Enter city">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">State</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="state" placeholder="Enter state">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Zip Code</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="zipCode" placeholder="Enter zip code">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Date of Birth</label>
+                                    <div class="control">
+                                        <input class="input" type="date" name="dob">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Subject/Class</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="subjectClass" placeholder="Enter subject/class">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Gender</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select name="gender">
+                                                <option>Male</option>
+                                                <option>Female</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Marital Status</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select name="maritalStatus">
+                                                <option>Single</option>
+                                                <option>Married</option>
+                                                <option>Divorced</option>
+                                                <option>Widowed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Nationality</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="nationality" placeholder="Enter nationality">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Emergency Contact</label>
+                                    <div class="control">
+                                        <input class="input" type="text" name="emergencyContact" placeholder="Enter emergency contact">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="has-text-centered mt-4">
+                            <button class="button is-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function handleProfileUpload() {
+        const fileInput = document.getElementById('upload-button');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Please select a file to upload.');
+            return false;
+        }
+
+        const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedFileTypes.includes(file.type)) {
+            alert('Please upload a valid image file (JPEG, PNG, GIF).');
+            return false;
+        }
+
+        const maxSizeInMB = 2;
+        if (file.size > maxSizeInMB * 1024 * 1024) {
+            alert(`File size exceeds ${maxSizeInMB} MB.`);
+            return false;
+        }
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/api/profile/upload', {
+                method: 'POST',
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error(`Upload failed: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (data.url) {
+                document.getElementById('profile-picture').src = data.url;
+                alert('Profile picture updated successfully!');
+            } else {
+                throw new Error('No URL received in the response');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Failed to upload profile picture.');
+        }
+    }
+
+    document.getElementById('upload-submit').addEventListener('click', handleProfileUpload);
+</script>
+
+</body>
+</html>
